@@ -1,0 +1,38 @@
+//Código que calcula a probabilidade de jogadores vencerem partidas de jogo de rpg. (Baseado no exercício 1093 de Matemática do Beecrowd).
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+
+using namespace std;
+
+double probalidade(int ev1,int ev2,int at, int d){
+    int n1=(ev1+d-1)/d;
+    int n2=(ev2+d-1)/d;
+
+    if(at==3){
+        return(double)n1/(n1+n2);
+    }
+    double p=at/6.0;
+    double q= 1.0-p;
+
+    double resultado=(1.0 - pow(q/p,n1)) / (1.0 - pow(q/p, n1+n2));
+    return resultado;
+}
+
+int main(){
+
+    int ev1,ev2,at,d;
+
+    while(cin>>ev1>>ev2>>at>>d){
+        
+        if(ev1==0 && ev2==0 && at==0 && d==0){
+            break;
+        }
+        
+        cout<< fixed << setprecision(1) << probalidade(ev1,ev2,at,d)*100<<"\n";
+     
+    }
+
+    return 0;
+}
