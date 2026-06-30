@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string retirarNumero(char &d,string &n ){
+    string strNova="";
+    for(int i=0;i<n.size();i++){
+        if(n[i]!=d){
+            if(!(n[i]=='0' && strNova.empty())){
+                strNova+=n[i];
+            }
+        }
+    }
+    if(strNova.empty()){
+        strNova="0";
+    }
+    return strNova;
+}
+
+int main(){
+    
+    char d;
+    string n;
+
+    while(cin>>d>>n){
+        if(d=='0' && n=="0"){
+            break;
+        }
+
+        cout<<retirarNumero(d,n)<<endl;
+
+    }
+
+
+    return 0;
+}
