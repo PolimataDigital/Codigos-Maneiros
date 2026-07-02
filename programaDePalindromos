@@ -1,0 +1,85 @@
+#include <iostream>
+#include <string>
+#include <limits>
+#include <cctype>
+#include <algorithm>
+
+using namespace std;
+
+string validarEntrada(string &nome, const string &mensagem){
+    bool soLetra=false;
+    while(!(soLetra)){
+        cout<<mensagem;
+        cin>>nome;
+        
+        soLetra=true;
+
+        for(int i=0;i<nome.size();i++){
+
+            if(!(isalpha(nome[i]))){
+                cout<<"Digite apenas letras!\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                soLetra=false;
+                break;
+            }
+        }
+    }
+    return nome;
+}
+
+string palindromo(string &entrada){
+    validarEntrada(entrada,"Digite a palavra: \n");
+
+    int esquerda=0;
+    int direita= entrada.size()-1;
+
+    while(esquerda<direita){
+        if(tolower(entrada[esquerda]) != tolower(entrada[direita])){
+            return "Nao e palindromo!\n";
+        }
+        esquerda++;
+        direita--;
+    }
+    return "E palindromo!\n";
+}
+
+string validarDesejaContinuar(string &entrada, const string &mensagem){
+    cout<<mensagem;
+
+    cin>>entrada;
+
+    transform(entrada.begin(), entrada.end(), entrada.begin(), [](unsigned char c){
+            return tolower(c);
+        });
+
+    return entrada;
+}
+
+int main(){
+
+    string palavraEscolhida="";
+
+    string respostaDesejaContinuar="";
+
+    while(true){
+        cout<<palindromo(palavraEscolhida);
+        
+        validarDesejaContinuar(respostaDesejaContinuar,"Se quiser, digite 'sair' para fechar o programa ou digite 'continuar'!\n");
+
+        while (respostaDesejaContinuar!="sair" && respostaDesejaContinuar!="continuar"){
+            cout<<"Digite apenas 'sair' ou 'continuar'!\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n'); 
+            validarDesejaContinuar(respostaDesejaContinuar,"\n");
+
+        }
+
+        if(respostaDesejaContinuar=="sair"){
+            cout<<"Programa encerrado!\n";
+            break;
+        }
+    }
+
+    return 0;
+}
