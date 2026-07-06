@@ -1,0 +1,133 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <limits>
+
+using namespace std;
+
+void validarEntrada(vector <int> &matrizA, vector <int> &matrizB, const string &mensagem){
+    for(int i=0;i<matrizA.size();i++){
+        while (true){
+            cout<<mensagem;
+            cout<<"Posição : "<<i+1<<" da matriz A: "<<"\n";
+           
+            if(!(cin>>matrizA[i]) || matrizA[i]<0){
+                cout<<"Digite apenas números inteiros e positivos!\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                continue;
+            }
+            break;
+        }
+    }
+
+    for(int i=0;i<matrizB.size();i++){
+        while (true){
+            cout<<mensagem;
+            cout<<"Posição : "<<i+1<<" da matriz B: "<<"\n";
+           
+            if(!(cin>>matrizB[i]) || matrizB[i]<0){
+                cout<<"Digite apenas números inteiros e positivos!\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                continue;
+            }
+            break;
+        }
+    }
+}
+
+void imprimirAB(vector <int> &matrizA, vector <int> &matrizB){
+    cout<<"Matriz A: \n";
+    for(int i =0; i<matrizA.size();i++){
+        cout<<matrizA[i]<<"\n";
+    }
+
+    cout<<"Matriz B: \n";
+    for(int i =0; i<matrizB.size();i++){
+        cout<<matrizB[i]<<"\n";
+    }
+
+
+}
+
+void construcaoMatrizC(vector <int> &matrizA,vector <unsigned long long> &matrizC){
+    for(int i=0; i<matrizA.size();i++){
+        unsigned long long somatorio=0;
+
+        for(int j=1; j<=matrizA[i];j++){
+            somatorio+=j;
+        }
+        matrizC[i]= somatorio;
+
+    }
+    cout<<"Resultado da matriz C : \n"; 
+    for(int i=0;i<matrizC.size();i++){
+        cout<<matrizC[i]<<"\n";
+    }
+}
+
+void construcaoMatrizD(vector <int> &matrizB,vector <unsigned long long> &matrizD){
+    for(int i=0; i<matrizB.size();i++){
+        unsigned long long fatorial=1;
+        
+        for(int j=1; j<=matrizB[i];j++){
+            fatorial*=j;
+        }
+        matrizD[i]=fatorial;    
+
+    }
+    cout<<"Resultado da matriz D : \n"; 
+    for(int i=0;i<matrizD.size();i++){
+        cout<<matrizD[i]<<"\n";
+    }
+}
+
+void construcaoMatrizE(const vector<int> &matrizA, 
+                       const vector<int> &matrizB,
+                       const vector<unsigned long long> &matrizC, 
+                       const vector<unsigned long long> &matrizD,
+                       vector<long long> &matrizE)
+                    {
+                        for(int i =0; i<matrizE.size();i++){
+                            long long diferenca_CD = static_cast <long long>(matrizC[i]) - static_cast<long long>(matrizD[i]);
+                            long long soma_AB = matrizA[i] + matrizB[i];
+                            
+                            matrizE[i] = diferenca_CD - soma_AB;
+                        }
+
+                        cout<<"Matriz E, que é a diferença de C e D com A mais B: \n";
+
+                        for(int i=0;i<matrizE.size();i++){
+                            cout<<matrizE[i]<<"\n";
+                        }
+
+                        cout<<"Matriz E ordenada de forma crescente\n";
+
+                        sort(matrizE.begin(), matrizE.end());
+
+                        for(int i =0;i<matrizE.size();i++){
+                            cout<<matrizE[i]<<"\n";
+                        }
+
+}
+
+
+int main (){
+
+    const int tamanho=5;
+    vector <int> matrizA(tamanho);
+    vector <int> matrizB(tamanho);
+    vector <unsigned long long> matrizC(tamanho);
+    vector <unsigned long long> matrizD(tamanho);
+    vector <long long> matrizE(tamanho);
+
+    validarEntrada(matrizA,matrizB,"Digite somente números inteiros para ser inserido: \n");
+    imprimirAB(matrizA,matrizB);
+    construcaoMatrizC(matrizA,matrizC);
+    construcaoMatrizD(matrizB,matrizD);
+    construcaoMatrizE(matrizA,matrizB,matrizC,matrizD,matrizE);
+
+
+    return 0;
+}
