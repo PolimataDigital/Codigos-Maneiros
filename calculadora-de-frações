@@ -1,0 +1,154 @@
+#include <iostream>
+#include <limits>
+#include <sstream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+
+bool capturarEntradasEValidarEntradas(int &n1, int &d1, char &operacao, int &n2, int &d2){// função que lerá a linha inteira e validará caractere por caractere
+    string entrada; 
+    cout<<"Digite a operação que você quer calcular: Ex(1/2 + 2/3)\n";
+
+    getline(cin,entrada);
+
+    stringstream linhaInteira(entrada); // dessa maneira vou conseguir validar tudo sem dar erro.
+
+    char barra,barra2;
+
+    if(linhaInteira>>n1>>barra>>d1>>operacao>>n2>>barra2>>d2){
+        bool barrasCorretas =(barra=='/' && barra2=='/');
+        bool operacaoValida = (operacao=='+' || operacao=='-' || operacao=='*' || operacao=='/');
+        bool denominadoresValidos = (d1!=0 && d2!=0);
+        bool divisaoPorZero = (operacao=='/' && n2==0);
+
+        if(barrasCorretas && operacaoValida && denominadoresValidos && !(divisaoPorZero)){
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+void criarNumeros(int &n1, int &d1, char &operacao, int &n2, int &d2, int &novoNumerador, int &novoDenominador){
+    
+    switch (operacao){
+    case '+' :
+        novoNumerador = n1*d2 + n2*d1;
+        novoDenominador = d1*d2;
+        break;
+
+    case '-':
+        novoNumerador = n1*d2 - n2*d1;
+        novoDenominador = d1*d2;
+        break;
+    
+     case '*':
+        novoNumerador = n1*n2;
+        novoDenominador = d1*d2;
+        break;
+
+     case '/':
+        novoNumerador = n1*d2;
+        novoDenominador = n2*d1;
+        break;
+    
+    default:
+        break;
+    }
+}
+
+int calcularMdc(int novoNumerador, int novoDenominador){
+    
+    
+    if(novoNumerador<0){
+        novoNumerador=novoNumerador*-1;
+    }
+
+    if(novoDenominador<0){
+        novoDenominador=novoDenominador*-1;
+    }
+
+    if(novoDenominador==0){
+        return novoNumerador; 
+    }
+    else{
+        int mdcCalculado= calcularMdc(novoDenominador, novoNumerador % novoDenominador);
+        return mdcCalculado;
+    }
+    
+}
+
+void simplificarFracao(int &novoNumerador, int &novoDenominador, int &numeradorSimplificado, int &denominadorSimplificado){
+    int mdc= calcularMdc(novoNumerador,novoDenominador);
+    
+    numeradorSimplificado = novoNumerador/mdc;
+    denominadorSimplificado= novoDenominador/mdc;
+
+    if(denominadorSimplificado<0){
+        denominadorSimplificado*=-1;
+        numeradorSimplificado*=-1;
+    }
+}
+
+bool validarContinuacao(string &entrada){
+    while(true){
+        cin>>entrada;
+
+        transform(entrada.begin(),entrada.end(),entrada.begin(), [](unsigned char c){
+            return tolower(c);
+        });
+
+        if(entrada=="n" || entrada=="não" || entrada =="nao"){
+            cout<<"Programa encerrado!\n";
+            return false;
+        }
+        else if(entrada== "sim" || entrada=="s"){
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            return true;
+        }
+        else{
+            cout<<"Entrada inválida. Digite apenas 's' ou 'n'\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            continue;
+        }
+
+        
+    }
+}
+
+int main(){
+    
+   
+
+    int n1,n2,d1,d2,novoNumerador,novoDenominador,numeradorSimplificado,denominadorSimplificado;
+
+    char operacao;
+
+    bool querContinuar=true;
+
+    string continuarNoPrograma="";
+
+    while(querContinuar){
+        while(!(capturarEntradasEValidarEntradas(n1,d1,operacao,n2,d2))){
+            cout << " Entrada inválida! Verifique os espaços, as barras '/' e certifique-se de não dividir por zero.\n\n";
+        }
+
+        criarNumeros(n1,d1,operacao,n2,d2,novoNumerador,novoDenominador);
+
+        simplificarFracao(novoNumerador,novoDenominador,numeradorSimplificado,denominadorSimplificado);
+            
+        cout << novoNumerador << "/" << novoDenominador << " = " << numeradorSimplificado << "/" << denominadorSimplificado << "\n";
+        
+        cout<<"Quer continuar? Digite 'sim' ou 'não'\n";
+
+        querContinuar=validarContinuacao(continuarNoPrograma);
+
+
+    }
+    
+    
+    return 0;
+}
