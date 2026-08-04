@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <limits>
+
+
+//baseado no exercício do Leetcode, só que fiz versão programa.
+
+using namespace std;
+
+string validarEntrada(){
+    string entrada;
+    
+    while(true){
+        cout<<"Digite o numeral romano para saber a conversao dele para inteiro:\n";
+
+        if(!(cin>>entrada)){
+            cout<<"Digite apenas os simbolos romanos!\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            continue;
+        }
+
+        bool caracterValido = true;
+
+        for(int i =0 ; i<entrada.size();i++){
+            char c = entrada[i];
+
+            if(c != 'I' && c != 'V' && c != 'X' && c != 'L' && c != 'C' && c != 'D' && c != 'M') {
+                caracterValido = false;
+                break;
+            }
+        }
+
+        if(!(caracterValido)){
+            cout<<"Digite apenas os símbolos romanos!\n";
+            continue;
+
+        }
+        
+
+        break;
+    }
+
+    return entrada;
+}
+
+int converterDeRomanoParaInteiro(string entrada){
+    unordered_map<char, int> valoresRomanos = { // Cria a lista dos caracteres romanos e o seu valor em inteiro
+        {'I', 1},
+        {'V', 5},
+        {'X', 10},
+        {'L', 50},
+        {'C',100},
+        {'D',500},
+        {'M',1000}
+    };
+
+    int resultado=0; // acumulador ou resultado em inteiros que iremos ver no final
+    
+    for(int i = 0; i < entrada.size(); i++){ // um loop que irá percorrer a entrada(string)
+        int carecterAtual = valoresRomanos[entrada[i]]; // o valor atual é o indice atual da lista dos simbolos com base o indice do caractere da string
+        
+        if(i +1 <entrada.size() && carecterAtual < valoresRomanos[entrada[i+1]]){ // a primeira condição é uma segurança para não acessar algo que não existe. A segunda acessa o próximo caractere
+
+            resultado-= carecterAtual;//  ex: IV, I - V = 4
+        }else{
+            resultado+=carecterAtual;// EX: VI, V + I = 6;
+        }
+
+    }
+    
+    return resultado;
+                
+}
+
+int main(){
+    while(true){
+        string entrada = validarEntrada();
+    
+        int resultado = converterDeRomanoParaInteiro(entrada);
+        
+        cout<< "Conversao para inteiro:\n"<<resultado<<"\n";
+
+        cout<<"\nSe quiser, pressione Ctrl+C para sair!\n";
+
+    }
+
+
+       
+    return 0 ;
+}
