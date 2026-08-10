@@ -1,0 +1,29 @@
+#include <iostream>
+
+using namespace std;
+
+int pessoaViva(int numeroPessoas, int numeroSaltos){
+    int posicao=0; // índice (0-based) do sobrevivente para o tamanho atual da roda
+
+    for (int i =2; i<=numeroPessoas;i++){ //i representa o tamanho atual da roda (2, 3, ..., n)
+        posicao = (posicao + numeroSaltos) % i; // reaproveita o sobrevivente da roda menor e ajusta sua posição na roda atual
+    }
+
+    return posicao +1; // como o índice começa com 0, é preciso isso
+} 
+
+int main(){
+
+    int testes, numeroPessoas,numeroSaltos,resultado;
+    cin>> testes;
+    
+    for(int i =1;i<=testes;i++){
+        cin>>numeroPessoas>>numeroSaltos;
+        resultado= pessoaViva(numeroPessoas,numeroSaltos);
+        cout<<"Case "<<i<<": "<<resultado<<"\n";
+    }
+    
+
+     
+    return 0;
+}
